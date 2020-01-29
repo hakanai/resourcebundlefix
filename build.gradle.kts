@@ -21,3 +21,11 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
 }
+
+tasks.withType<Test>() {
+    // Java 8 forces me to set java.ext.dirs to make the lib get picked up.
+    // On the other hand, Java 11 gives an error if you set `java.ext.dirs`.
+    if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+        systemProperty("java.ext.dirs", "build/libs");
+    }
+}
