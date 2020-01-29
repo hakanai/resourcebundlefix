@@ -15,9 +15,9 @@ dependencies {
     compileOnly("com.google.auto.service:auto-service-annotations:1.0-rc6")
     annotationProcessor("com.google.auto.service:auto-service:1.0-rc6")
     testImplementation("junit:junit:4.12")
+    testImplementation("org.hamcrest:hamcrest:2.2")
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
 }
-
