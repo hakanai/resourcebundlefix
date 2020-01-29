@@ -12,9 +12,12 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.spi.ResourceBundleControlProvider;
 
+import com.google.auto.service.AutoService;
+
 /**
  * Implementation of Java 8 {@link ResourceBundleControlProvider} with fixes to work around JRE issues.
  */
+@AutoService(ResourceBundleControlProvider.class)
 public class ResourceBundleControlProviderImpl implements ResourceBundleControlProvider {
     private static final ResourceBundle.Control INSTANCE = new ResourceBundleControlImpl();
 
@@ -179,6 +182,8 @@ public class ResourceBundleControlProviderImpl implements ResourceBundleControlP
                 return toResourceName(bundleName, suffix);
             }
         }
+
+
     }
 
     /**
