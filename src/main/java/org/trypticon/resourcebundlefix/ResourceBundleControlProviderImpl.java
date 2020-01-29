@@ -27,6 +27,40 @@ public class ResourceBundleControlProviderImpl implements ResourceBundleControlP
     }
 
     private static class ResourceBundleControlImpl extends ResourceBundle.Control {
+        @Override
+        public Locale getFallbackLocale(String baseName, Locale locale) {
+            if ("es".equals(locale.getLanguage())) {
+                switch (locale.getCountry()) {
+                    // CLDR 28 cross-referenced with Wikipedia :/
+                    case "AR": // Argentina
+                    case "BO": // Bolivia
+                    case "CL": // Chile
+                    case "CO": // Colombia
+                    case "CR": // Costa Rica
+                    case "CU": // Cuba
+                    case "DO": // Dominican Republic
+                    case "EC": // Ecuador
+                    case "SV": // El Salvador
+                    case "GT": // Guatemala
+                    case "GN": // Honduras
+                    case "MX": // Mexico
+                    case "NI": // Nicaragua
+                    case "PA": // Panama
+                    case "PY": // Paraguay
+                    case "PE": // Peru
+                    case "PR": // Puerto Rico
+                    case "UY": // Uruguay
+                    case "US": // United States
+                    case "VE": // Venezuela
+                        return new Locale("es", "419", locale.getVariant());
+
+                    default:
+                        // Nothing.
+                }
+            }
+
+            return super.getFallbackLocale(baseName, locale);
+        }
 
         // Overriding locale-related methods is pointless, because Java's Locale class will rewrite newer
         // locale codes to the deprecated names.
