@@ -56,9 +56,10 @@ public class ResourceBundleControlProviderImpl implements ResourceBundleControlP
 
             if (standardLanguage != null) {
                 // Try the standard name first (reward people who are doing it right.)
-                AltLocale standardLocale = new AltLocale(altLocale.getLanguage(), altLocale.getCountry(), altLocale.getVariant(), altLocale.getScript());
+                AltLocale standardLocale = new AltLocale(standardLanguage, altLocale.getCountry(), altLocale.getVariant(), altLocale.getScript());
                 try {
                     ResourceBundle result = superNewBundle(baseName, standardLocale, format, loader, reload);
+
                     if (result != null) {
                         return result;
                     }
@@ -222,6 +223,29 @@ public class ResourceBundleControlProviderImpl implements ResourceBundleControlP
 
         private String getScript() {
             return script;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder(128);
+            if (script != "") {
+                if (variant != "") {
+                    sb.append(language).append('_').append(script).append('_').append(country).append('_').append(variant);
+                } else if (country != "") {
+                    sb.append(language).append('_').append(script).append('_').append(country);
+                } else {
+                    sb.append(language).append('_').append(script);
+                }
+            } else {
+                if (variant != "") {
+                    sb.append(language).append('_').append(country).append('_').append(variant);
+                } else if (country != "") {
+                    sb.append(language).append('_').append(country);
+                } else {
+                    sb.append(language);
+                }
+            }
+            return sb.toString();
         }
     }
 }
