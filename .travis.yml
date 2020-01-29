@@ -1,0 +1,9 @@
+language: java
+jdk:
+- oraclejdk8
+- adoptopenjdk11
+- adoptopenjdk14
+
+script:
+  - ./gradlew build --scan -s
+
