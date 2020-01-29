@@ -1,16 +1,11 @@
 package org.trypticon.resourcebundlefix;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -21,46 +16,35 @@ public class LegacyLocaleNamesTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        Object[] bundleNames = {
-                "org.trypticon.resourcebundlefix.LastResortFallbackClass",
-                "org.trypticon.resourcebundlefix.LegacyNameClass",
-                "org.trypticon.resourcebundlefix.StandardNameClass",
-                "org/trypticon/resourcebundlefix/LastResortFallbackProperties",
-                "org/trypticon/resourcebundlefix/LegacyNameProperties",
-                "org/trypticon/resourcebundlefix/StandardNameProperties",
-        };
+        return new Object[][] {
+                { "org.trypticon.resourcebundlefix.LegacyNameClass", "he", "iw" },
+                { "org.trypticon.resourcebundlefix.LegacyNameClass", "iw", "iw" },
+                { "org.trypticon.resourcebundlefix.StandardNameClass", "he", "iw" },
+                { "org.trypticon.resourcebundlefix.StandardNameClass", "iw", "iw" },
+                { "org.trypticon.resourcebundlefix.LegacyNameProperties", "he", "iw" },
+                { "org.trypticon.resourcebundlefix.LegacyNameProperties", "iw", "iw" },
+                { "org.trypticon.resourcebundlefix.StandardNameProperties", "he", "iw" },
+                { "org.trypticon.resourcebundlefix.StandardNameProperties", "iw", "iw" },
 
-        Object[] locales = {
-                "he-IL", // standard name
-                "iw-IL", // legacy name
-                "yi-IL", // standard name
-                "ji-IL", // legacy name
-                "id-ID", // standard name
-                "in-ID", // legacy name
+                { "org.trypticon.resourcebundlefix.StandardNameClass", "ji", "ji" },
+                { "org.trypticon.resourcebundlefix.StandardNameClass", "in", "in" },
         };
-
-        Stream.Builder<Object[]> builder = Stream.builder();
-        for (int i = 0; i < bundleNames.length; i++)
-        {
-            for (int j = 0; j < locales.length; j++)
-            {
-                builder.add(new Object[] { bundleNames[i], locales[j] });
-            }
-        }
-        return builder.build().toArray(Object[][]::new);
     }
 
     private final String baseName;
-    private final Locale locale;
+    private final Locale requestedLocale;
+    private final Locale expectedLocale;
 
-    public LegacyLocaleNamesTest(String baseName, String languageTag) {
+    public LegacyLocaleNamesTest(String baseName, String requestedLanguageTag, String expectedLanguageTag) {
         this.baseName = baseName;
-        this.locale = Locale.forLanguageTag(languageTag);
+        this.requestedLocale = Locale.forLanguageTag(requestedLanguageTag);
+        this.expectedLocale = Locale.forLanguageTag(expectedLanguageTag);
     }
 
     @Test
     public void testLookup() {
-        ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale);
+        ResourceBundle bundle = ResourceBundle.getBundle(baseName, requestedLocale);
+        assertThat(bundle.getLocale(), is(equalTo(expectedLocale)));
         assertThat(bundle.getString("key"), is(equalTo("value")));
     }
 }
