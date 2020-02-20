@@ -55,7 +55,8 @@ public class ResourceBundleControlProviderImpl implements ResourceBundleControlP
                         return new Locale("es", "419", locale.getVariant());
 
                     default:
-                        // Nothing.
+                        // Nothing. Calling superclass constructor would cause infinite loop...
+                        return null;
                 }
             }
 
